@@ -1,13 +1,37 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Menu, X, Heart, Search } from "lucide-react";
+import { Menu, X, Heart, Search, Moon, Sun } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
+import { useBooks, type Book } from "../context/BooksContext";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { query, setQuery } = useSearch();
+  const { books } = useBooks();
+  const { theme, setTheme } = useTheme();
+
+  //função gera sugestões de busca
+  const suggestions : Book[] = useMemo(() => {
+    if (!query.trim()) return []
+    return books
+      .filter(
+        (book) =>
+          book.name.toLowerCase().includes(query.toLowerCase()) ||
+          book.authors.some((a) =>
+            a.toLowerCase().includes(query.toLowerCase())
+          )
+      )
+      .slice(0, 5);
+  }, [query, books]);
+
+  function handleSelectSuggestion(suggestion: string) { 
+    setQuery(suggestion)
+  }
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
@@ -15,12 +39,12 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* LOGO */}
           <Link href="/" className="flex items-center gap-2 text-xl font-bold text-blue-600">
-            📚 Bookshelf
+            <Image src="/books_logo.webp" alt="Logo" width={30} height={30} /> Bookshelf
           </Link>
 
           {/* SEARCH BAR - Desktop */}
-          <div className="hidden md:flex flex-1 justify-center mx-6">
-            <div className="relative w-full max-w-lg">
+          <div className="hidden md:flex flex-1 justify-center mx-6 relative">
+            <div className="w-full max-w-lg relative">
               <input
                 type="text"
                 value={query}
@@ -29,6 +53,24 @@ export default function Header() {
                 className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
               <Search className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
+
+               {/* AUTOCOMPLETE */}
+              {suggestions.length > 0 && (
+              <ul className="absolute top-full left-0 w-full bg-white border rounded-lg mt-1 shadow-md z-50">
+                  {suggestions.map((book) => (
+                    <li
+                      key={book.id}
+                      onClick={() => handleSelectSuggestion(book.name)}
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                    >
+                      {book.name}{" "}
+                      <span className="text-xs text-gray-500">
+                        ({book.authors.join(", ")})
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
 
@@ -40,6 +82,21 @@ export default function Header() {
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 rounded-full hover:bg-gray-100"
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+
+            
+            {/* Botão tema */}
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+    >
+      {theme === "dark" ? <Sun /> : <Moon />}
+    </button>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
