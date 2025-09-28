@@ -1,10 +1,12 @@
+//@ts-expect-error - evita erro com React 18 e Next.js 13
+import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import Header from "./components/Header";
 import { SearchProvider } from "./context/SearchContext";
 import { BooksProvider } from "./context/BooksContext";
-import ThemeProvider from "./components/ThemeProvider";
+import {ThemeProvider} from "./components/ThemeProvider";
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +34,10 @@ export default function RootLayout({
         <ThemeProvider>
           <BooksProvider>
             <SearchProvider>
-              <Header />
-              <main className="pt-4">{children}</main>
+              <FavoritesProvider>
+                <Header />
+                <main className="pt-4">{children}</main>
+              </FavoritesProvider>
             </SearchProvider>
           </BooksProvider>
         </ThemeProvider>

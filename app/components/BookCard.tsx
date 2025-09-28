@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+
 import Link from "next/link";
+import { useFavorites } from "../context/FavoritesContext";
 
 export type BookType = {
   id: string;
@@ -40,10 +42,11 @@ export function BookCard({ book }: { book: BookType }) {
             e.currentTarget.src = "/No_Image_Available.jpg";
           }}
         />
-        <h2 className="text-lg font-bold mt-3">Autor(es): {book.name}</h2>
+        <h2 className="text-lg font-bold mt-3"> {book.name}</h2>
         <p className="text-sm font-semibold text-gray-900">
-          {book.authors?.join(", ")}
+          Autor(es):{book.authors?.join(", ")}
         </p>
+        
         <p className="text-sm text-gray-600 line-clamp-3">Saiba mais ...</p>
       </div>
     </Link>

@@ -5,15 +5,16 @@ import Link from "next/link";
 import { Menu, X, Heart, Search, Moon, Sun } from "lucide-react";
 import { useSearch } from "../context/SearchContext";
 import { useBooks, type Book } from "../context/BooksContext";
-import { useTheme } from "next-themes";
+import { useTheme } from "./ThemeProvider";
 import Image from "next/image";
-
+import { useFavorites } from "../context/FavoritesContext";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const { query, setQuery } = useSearch();
   const { books } = useBooks();
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
+  const { favorites, showFavorites, toggleShowFavorites } = useFavorites();
 
   //função gera sugestões de busca
   const suggestions : Book[] = useMemo(() => {
@@ -76,24 +77,31 @@ export default function Header() {
 
           {/* Ícones */}
           <div className="flex items-center gap-4">
-            <button className="p-2 rounded-full hover:bg-gray-100">
-              <Heart className="h-6 w-6 text-red-500" />
-            </button>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-full hover:bg-gray-100"
-            >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
+          <button
+  onClick={toggleShowFavorites}
+  className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+>
+  <Heart className={`h-6 w-6 ${showFavorites ? "text-red-500" : ""}`} />
+  {favorites.length > 0 && (
+    <span className="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+      {favorites.length}
+    </span>
+  )}
+</button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-full hover:bg-gray-100"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
 
-            
             {/* Botão tema */}
-    <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
-    >
+          <button
+              onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
       {theme === "dark" ? <Sun /> : <Moon />}
-    </button>
+        </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
