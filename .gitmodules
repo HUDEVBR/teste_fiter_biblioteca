@@ -1,0 +1,3 @@
+[submodule "books-api"]
+	path = books-api
+	url = https://github.com/alencarlucas/books-api
