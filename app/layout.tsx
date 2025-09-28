@@ -1,4 +1,3 @@
-//@ts-expect-error - evita erro com React 18 e Next.js 13
 import "./globals.css";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";

@@ -8,6 +8,7 @@ import { useBooks, type Book } from "../context/BooksContext";
 import { useTheme } from "./ThemeProvider";
 import Image from "next/image";
 import { useFavorites } from "../context/FavoritesContext";
+import SearchBar from "./SearchBar";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,13 +47,7 @@ export default function Header() {
           {/* SEARCH BAR - Desktop */}
           <div className="hidden md:flex flex-1 justify-center mx-6 relative">
             <div className="w-full max-w-lg relative">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Buscar livros..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              />
+              <SearchBar />
               <Search className="absolute left-3 top-2.5 text-gray-400 h-5 w-5" />
 
                {/* AUTOCOMPLETE */}
@@ -74,20 +69,19 @@ export default function Header() {
               )}
             </div>
           </div>
-
           {/* Ícones */}
           <div className="flex items-center gap-4">
           <button
-  onClick={toggleShowFavorites}
-  className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
->
-  <Heart className={`h-6 w-6 ${showFavorites ? "text-red-500" : ""}`} />
-  {favorites.length > 0 && (
-    <span className="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-      {favorites.length}
-    </span>
-  )}
-</button>
+            onClick={toggleShowFavorites}
+            className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            <Heart className={`h-6 w-6 ${showFavorites ? "text-red-500" : ""}`} />
+            {favorites.length > 0 && (
+              <span className="absolute -top-1 -right-1 text-xs bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                {favorites.length}
+              </span>
+            )}
+          </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 rounded-full hover:bg-gray-100"

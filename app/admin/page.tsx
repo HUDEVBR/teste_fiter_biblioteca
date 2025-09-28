@@ -2,8 +2,15 @@
 import { useEffect, useState } from "react";
 import { fetchBooks } from "../lib/api";
 
+type Book = {
+  id: number;
+  name: string;
+  authors: string;
+  imagelink?: string;
+};
+
 export default function Admin() {
-  const [books, setBooks] = useState<any[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
