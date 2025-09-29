@@ -38,3 +38,8 @@ Mais recentes adicionados.
 <b>Internacionalização (i18n)</b>: Suporte a múltiplos idiomas (ex.: português e inglês).
 
 <b>CRUD Completo na Página Admin</b>: Implementação das operações de criar, ler, atualizar e deletar livros na rota /admin.
+
+
+
+<h3>Licença</h3>
+Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais detalhes.
